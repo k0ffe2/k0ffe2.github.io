@@ -120,17 +120,4 @@ document.addEventListener('DOMContentLoaded', () => {
     const darkModeEnabled = localStorage.getItem('darkModeEnabled') === 'true';
 
     // Применяем соответствующий класс, если темная тема была активирована
-    if (darkModeEnabled) {
-        document.body.classList.add('dark-theme');
-    }
-
-    // Обработчик события для кнопки переключения темы
-    const themeToggleBtn = document.getElementById('themeToggleBtn');
-    themeToggleBtn.addEventListener('click', () => {
-        // Инвертируем состояние темы
-        const isDarkModeEnabled = document.body.classList.toggle('dark-theme');
-
-        // Сохраняем состояние темы в localStorage
-        localStorage.setItem('darkModeEnabled', isDarkModeEnabled.toString());
-    });
-});
+    if (dark

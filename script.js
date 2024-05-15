@@ -64,4 +64,3 @@ document.addEventListener('DOMContentLoaded', () => {
     sessionEarnings = parseFloat(localStorage.getItem('sessionEarnings')) || 0;
     updateDisplay();
 });
-                               

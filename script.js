@@ -53,7 +53,7 @@ async function saveTransaction() {
         try {
             const now = new Date();
             const moscowTime = new Date(now.toLocaleString("en-US", {timeZone: "Europe/Moscow"}));
-            const almatyTime = new Date(now.toLocaleString("en-US", {timeZone: "Asia/Almaty"}));
+            const almatyTime = new Date(now.toLocaleString("en-US", {timeZone: "Asia/Astana"}));
             const timeString = `МСК: ${moscowTime.toLocaleTimeString()}, Алматы: ${almatyTime.toLocaleTimeString()}`;
             log.unshift({ time: timeString, amount, comment });
 

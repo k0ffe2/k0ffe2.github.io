@@ -20,6 +20,18 @@ body {
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
     width: 90%;
     max-width: 600px;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .input-section {
@@ -39,6 +51,7 @@ body {
     margin-bottom: 15px;
     width: 80%;
     max-width: 300px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 .save-button {
@@ -53,6 +66,7 @@ body {
     margin-bottom: 20px;
     display: flex;
     align-items: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 .save-button i {
@@ -91,6 +105,7 @@ body {
     margin: 10px 0;
     display: flex;
     align-items: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 .session-button i {
@@ -110,6 +125,7 @@ body {
     overflow-y: auto;
     max-height: 300px;
     margin-top: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 .log-section ul {
@@ -125,6 +141,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 .log-section li.earning {

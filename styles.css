@@ -12,16 +12,19 @@ body {
 
 .container {
     display: flex;
+    flex-direction: column;
     background-color: #1c1c1c;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    width: 90%;
+    max-width: 800px;
 }
 
 .input-section {
     display: flex;
     flex-direction: column;
-    margin-right: 20px;
+    margin-bottom: 20px;
 }
 
 .input-section input {
@@ -31,7 +34,7 @@ body {
     padding: 10px;
     color: #ccc;
     margin-bottom: 10px;
-    width: 300px;
+    width: 100%;
 }
 
 .save-button {
@@ -43,6 +46,7 @@ body {
     font-size: 16px;
     cursor: pointer;
     transition: transform 0.3s ease;
+    margin-bottom: 20px;
 }
 
 .save-button:hover {
@@ -50,14 +54,15 @@ body {
 }
 
 .info {
-    margin-top: 20px;
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
-    align-items: center;
+    gap: 10px;
 }
 
 .info p {
     margin: 0;
+    flex: 1 1 auto;
 }
 
 .session-button {
@@ -68,6 +73,7 @@ body {
     color: white;
     cursor: pointer;
     transition: transform 0.3s ease;
+    flex: 1 1 auto;
 }
 
 .session-button:hover {
@@ -78,7 +84,7 @@ body {
     background-color: #1c1c1c;
     padding: 10px;
     border-radius: 10px;
-    width: 300px;
+    width: 100%;
     overflow-y: auto;
     max-height: 300px;
 }
@@ -94,12 +100,8 @@ body {
     padding: 10px;
     margin-bottom: 10px;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.log-section li span {
-    font-size: 14px;
+    flex-direction: column;
+    gap: 5px;
 }
 
 .log-section li.earning {

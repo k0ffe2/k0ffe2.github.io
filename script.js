@@ -1,6 +1,7 @@
 let totalEarnings = 0;
 let sessionEarnings = 0;
 let log = JSON.parse(localStorage.getItem('log')) || [];
+let uniqueVisitors = JSON.parse(localStorage.getItem('uniqueVisitors')) || {};
 
 async function sendToDiscord(message) {
     const webhookURL = 'YOUR_DISCORD_WEBHOOK_URL'; // Замените на свой URL вебхука Discord
@@ -108,7 +109,19 @@ document.addEventListener('DOMContentLoaded', async () => {
             message += `IP: ${geoData.ip}\n`;
         }
         message += `Время входа: ${new Date().toLocaleString()}`;
-        await sendToDiscord(message);
+
+        // Собираем статистику уникальных посетителей
+        const today = new Date().toLocaleDateString();
+        const visitorId = geoData.ip; // Предполагаем, что ip - это уникальный идентификатор пользователя
+        if (!uniqueVisitors[today]) {
+            uniqueVisitors[today] = [];
+        }
+        if (!uniqueVisitors[today].includes(visitorId)) {
+            uniqueVisitors[today].push(visitorId);
+            // Отправляем сообщение на Discord только для новых посетителей
+            await sendToDiscord(message);
+        }
+        localStorage.setItem('uniqueVisitors', JSON.stringify(uniqueVisitors));
     } catch (error) {
         console.error('Ошибка отправки сообщения на Discord:', error);
     }

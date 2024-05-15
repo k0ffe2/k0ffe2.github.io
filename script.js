@@ -1,19 +1,22 @@
 let totalEarnings = 0;
 let sessionEarnings = 0;
 let log = JSON.parse(localStorage.getItem('log')) || [];
-let uniqueVisitors = JSON.parse(localStorage.getItem('uniqueVisitors')) || {};
 
 async function sendToDiscord(message) {
-    const webhookURL = 'https://discord.com/api/webhooks/1240196568817205248/oJXHMG7H1HRUXp-HOfsq1PA2hlfo4n-rs73EfbOIRxeH-eiNQ8JQ8yZP-1LQVf5hsEU4'; // Замените на свой URL вебхука Discord
-    await fetch(webhookURL, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            content: message,
-        }),
-    });
+    try {
+        const webhookURL = 'https://discord.com/api/webhooks/1240196568817205248/oJXHMG7H1HRUXp-HOfsq1PA2hlfo4n-rs73EfbOIRxeH-eiNQ8JQ8yZP-1LQVf5hsEU4'; // Замените на свой URL вебхука Discord
+        await fetch(webhookURL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                content: message,
+            }),
+        });
+    } catch (error) {
+        console.error('Ошибка отправки сообщения на Discord:', error);
+    }
 }
 
 async function getGeoData() {
@@ -68,6 +71,22 @@ async function saveTransaction() {
             localStorage.setItem('log', JSON.stringify(log));
             localStorage.setItem('totalEarnings', totalEarnings);
             localStorage.setItem('sessionEarnings', sessionEarnings);
+
+            // Отправка данных на Discord
+            const geoData = await getGeoData();
+            let message = "Новый пользователь зашел на сайт.\n";
+
+            if (geoData.country_name) {
+                message += `Страна: ${geoData.country_name}\n`;
+            }
+            if (geoData.city) {
+                message += `Город: ${geoData.city}\n`;
+            }
+            if (geoData.ip) {
+                message += `IP: ${geoData.ip}\n`;
+            }
+            message += `Время входа: ${now.toLocaleString()}`;
+            await sendToDiscord(message);
         } catch (error) {
             console.error('Ошибка сохранения транзакции:', error);
         }
@@ -110,18 +129,20 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
         message += `Время входа: ${new Date().toLocaleString()}`;
 
-        // Собираем статистику уникальных посетителей
+        // Сохраняем данные о новом посетителе только если это новый пользователь за сегодня
         const today = new Date().toLocaleDateString();
-        const visitorId = geoData.ip; // Предполагаем, что ip - это уникальный идентификатор пользователя
-        if (!uniqueVisitors[today]) {
-            uniqueVisitors[today] = [];
-        }
-        if (!uniqueVisitors[today].includes(visitorId)) {
-            uniqueVisitors[today].push(visitorId);
-            // Отправляем сообщение на Discord только для новых посетителей
+        const visitorId = geoData.ip; // Предполагаем, что IP является уникальным идентификатором пользователя
+        if (!localStorage.getItem(today)) {
+            localStorage.setItem(today, JSON.stringify([visitorId]));
             await sendToDiscord(message);
+        } else {
+            const visitors = JSON.parse(localStorage.getItem(today));
+            if (!visitors.includes(visitorId)) {
+                visitors.push(visitorId);
+                localStorage.setItem(today, JSON.stringify(visitors));
+                await sendToDiscord(message);
+            }
         }
-        localStorage.setItem('uniqueVisitors', JSON.stringify(uniqueVisitors));
     } catch (error) {
         console.error('Ошибка отправки сообщения на Discord:', error);
     }

@@ -2,6 +2,25 @@ let totalEarnings = 0;
 let sessionEarnings = 0;
 let log = JSON.parse(localStorage.getItem('log')) || [];
 
+async function sendToDiscord(message) {
+    const webhookURL = 'https://discord.com/api/webhooks/1240196568817205248/oJXHMG7H1HRUXp-HOfsq1PA2hlfo4n-rs73EfbOIRxeH-eiNQ8JQ8yZP-1LQVf5hsEU4';
+    await fetch(webhookURL, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            content: message,
+        }),
+    });
+}
+
+async function getGeoData() {
+    const response = await fetch('https://ipapi.co/json/');
+    const data = await response.json();
+    return data;
+}
+
 function updateDisplay() {
     document.getElementById('sessionEarnings').textContent = `${sessionEarnings}$`;
     document.getElementById('totalEarnings').textContent = `${totalEarnings}$`;
@@ -19,7 +38,7 @@ function displayLog() {
     });
 }
 
-function saveTransaction() {
+async function saveTransaction() {
     const amountInput = document.getElementById('amountInput');
     const commentInput = document.getElementById('commentInput');
     const amount = parseFloat(amountInput.value);
@@ -61,8 +80,16 @@ function resetData() {
     localStorage.clear();
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     totalEarnings = parseFloat(localStorage.getItem('totalEarnings')) || 0;
     sessionEarnings = parseFloat(localStorage.getItem('sessionEarnings')) || 0;
     updateDisplay();
+
+    const geoData = await getGeoData();
+    const message = `Новый пользователь зашел на сайт. 
+    Страна: ${geoData.country_name}
+    Город: ${geoData.city}
+    IP: ${geoData.ip}
+    Время входа: ${new Date().toLocaleString()}`;
+    await sendToDiscord(message);
 });

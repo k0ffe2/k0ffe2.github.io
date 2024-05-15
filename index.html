@@ -12,12 +12,12 @@
         <div class="input-section">
             <input type="number" id="amountInput" placeholder="Введите сумму">
             <input type="text" id="commentInput" placeholder="Введите комментарий">
-            <button class="save-button" onclick="saveTransaction()">СОХРАНИТЬ</button>
+            <button class="save-button" onclick="saveTransaction()"><i class="fas fa-save"></i> СОХРАНИТЬ</button>
             <div class="info">
-                <p>Заработок за серию: <span id="sessionEarnings">0$</span></p>
-                <button class="session-button" onclick="newSession()">Новая серия</button>
-                <button class="session-button" onclick="resetData()">Сбросить</button>
-                <p>Заработано всего: <span id="totalEarnings">0$</span></p>
+                <p><i class="fas fa-coins"></i> Заработок за серию: <span id="sessionEarnings">0$</span></p>
+                <button class="session-button" onclick="newSession()"><i class="fas fa-plus-circle"></i> Новая серия</button>
+                <button class="session-button" onclick="resetData()"><i class="fas fa-trash-alt"></i> Сбросить</button>
+                <p><i class="fas fa-wallet"></i> Заработано всего: <span id="totalEarnings">0$</span></p>
             </div>
         </div>
         <div class="log-section">

@@ -8,6 +8,7 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
+    transition: background-color 0.3s ease, color 0.3s ease; /* Добавим анимацию при смене темы */
 }
 
 .container {
@@ -21,17 +22,56 @@ body {
     width: 90%;
     max-width: 600px;
     animation: fadeIn 0.5s ease-in-out;
+    transition: background-color 0.3s ease; /* Добавим анимацию при смене темы */
 }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+/* Стили для темной темы */
+.dark-theme {
+    background-color: #333;
+    color: #EEE;
+}
+
+.dark-theme .input-section input,
+.dark-theme .info p,
+.dark-theme .log-section li,
+.dark-theme .session-button,
+.dark-theme .save-button {
+    background-color: #444;
+    border-color: #666;
+    color: #EEE;
+}
+
+.dark-theme .save-button:hover,
+.dark-theme .session-button:hover {
+    background-color: #5a5a5a;
+}
+
+.dark-theme .log-section {
+    background-color: #555;
+}
+
+.dark-theme #themeToggleBtn {
+    color: #EEE;
+}
+
+.light-theme {
+    background-color: #F7F7F7;
+    color: #333;
+}
+
+.light-theme .input-section input,
+.light-theme .info p,
+.light-theme .log-section li,
+.light-theme .session-button,
+.light-theme .save-button {
+    background-color: #EEEEEE;
+    border-color: #CCCCCC;
+    color: #333;
+}
+
+.light-theme .save-button:hover,
+.light-theme .session-button:hover {
+    background-color: #45A049;
 }
 
 .input-section {
@@ -158,11 +198,6 @@ body {
     }
 }
 
-.dark-theme {
-    background-color: #333;
-    color: #FFF;
-}
-
 .theme-toggle {
     position: fixed;
     bottom: 20px;
@@ -180,57 +215,3 @@ body {
 .theme-toggle button:hover {
     color: #FFF;
 }
-
-body {
-    font-family: 'Roboto', sans-serif;
-    background-color: #F7F7F7;
-    color: #333;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    transition: background-color 0.3s ease, color 0.3s ease; /* Добавим анимацию при смене темы */
-}
-
-.container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: #FFFFFF;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    width: 90%;
-    max-width: 600px;
-    animation: fadeIn 0.5s ease-in-out;
-    transition: background-color 0.3s ease; /* Добавим анимацию при смене темы */
-}
-
-/* Стили для темной темы */
-.dark-theme {
-    background-color: #333;
-    color: #EEE;
-}
-
-.dark-theme .input-section input,
-.dark-theme .info p,
-.dark-theme .log-section li,
-.dark-theme .session-button,
-.dark-theme .save-button {
-    background-color: #444;
-    border-color: #666;
-    color: #EEE;
-}
-
-.dark-theme .save-button:hover,
-.dark-theme .session-button:hover {
-    background-color: #5a5a5a;
-}
-
-.dark-theme .log-section {
-    background-color: #555;
-}
-
-.dark-theme #themeToggleBtn {

@@ -1,6 +1,6 @@
 let totalEarnings = 0;
 let sessionEarnings = 0;
-let log = [];
+let log = JSON.parse(localStorage.getItem('log')) || [];
 
 function updateDisplay() {
     document.getElementById('sessionEarnings').textContent = `${sessionEarnings}$`;
@@ -36,6 +36,10 @@ function saveTransaction() {
 
         amountInput.value = '';
         commentInput.value = '';
+
+        localStorage.setItem('log', JSON.stringify(log));
+        localStorage.setItem('totalEarnings', totalEarnings);
+        localStorage.setItem('sessionEarnings', sessionEarnings);
     } else {
         alert('Пожалуйста, введите сумму и комментарий.');
     }
@@ -44,6 +48,7 @@ function saveTransaction() {
 function newSession() {
     sessionEarnings = 0;
     updateDisplay();
+    localStorage.setItem('sessionEarnings', sessionEarnings);
 }
 
 function resetData() {
@@ -51,7 +56,12 @@ function resetData() {
     totalEarnings = 0;
     log = [];
     updateDisplay();
+    localStorage.clear();
 }
 
-// Initial display update
-updateDisplay();
+document.addEventListener('DOMContentLoaded', () => {
+    totalEarnings = parseFloat(localStorage.getItem('totalEarnings')) || 0;
+    sessionEarnings = parseFloat(localStorage.getItem('sessionEarnings')) || 0;
+    updateDisplay();
+});
+                

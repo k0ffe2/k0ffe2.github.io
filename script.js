@@ -3,20 +3,16 @@ let sessionEarnings = 0;
 let log = JSON.parse(localStorage.getItem('log')) || [];
 
 async function sendToDiscord(message) {
-    try {
-        const webhookURL = 'https://discord.com/api/webhooks/1240196568817205248/oJXHMG7H1HRUXp-HOfsq1PA2hlfo4n-rs73EfbOIRxeH-eiNQ8JQ8yZP-1LQVf5hsEU4'; // Замените на свой URL вебхука Discord
-        await fetch(webhookURL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                content: message,
-            }),
-        });
-    } catch (error) {
-        console.error('Ошибка отправки сообщения на Discord:', error);
-    }
+    const webhookURL = 'https://discord.com/api/webhooks/1240196568817205248/oJXHMG7H1HRUXp-HOfsq1PA2hlfo4n-rs73EfbOIRxeH-eiNQ8JQ8yZP-1LQVf5hsEU4'; // Замените на свой URL вебхука Discord
+    await fetch(webhookURL, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            content: message,
+        }),
+    });
 }
 
 async function getGeoData() {
@@ -109,41 +105,8 @@ function resetData() {
     localStorage.clear();
 }
 
-document.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener('DOMContentLoaded', () => {
     totalEarnings = parseFloat(localStorage.getItem('totalEarnings')) || 0;
     sessionEarnings = parseFloat(localStorage.getItem('sessionEarnings')) || 0;
     updateDisplay();
-
-    try {
-        const geoData = await getGeoData();
-        let message = "Новый пользователь зашел на сайт.\n";
-
-        if (geoData.country_name) {
-            message += `Страна: ${geoData.country_name}\n`;
-        }
-        if (geoData.city) {
-            message += `Город: ${geoData.city}\n`;
-        }
-        if (geoData.ip) {
-            message += `IP: ${geoData.ip}\n`;
-        }
-        message += `Время входа: ${new Date().toLocaleString()}`;
-
-        // Сохраняем данные о новом посетителе только если это новый пользователь за сегодня
-        const today = new Date().toLocaleDateString();
-        const visitorId = geoData.ip; // Предполагаем, что IP является уникальным идентификатором пользователя
-        if (!localStorage.getItem(today)) {
-            localStorage.setItem(today, JSON.stringify([visitorId]));
-            await sendToDiscord(message);
-        } else {
-            const visitors = JSON.parse(localStorage.getItem(today));
-            if (!visitors.includes(visitorId)) {
-                visitors.push(visitorId);
-                localStorage.setItem(today, JSON.stringify(visitors));
-                await sendToDiscord(message);
-            }
-        }
-    } catch (error) {
-        console.error('Ошибка отправки сообщения на Discord:', error);
-    }
 });

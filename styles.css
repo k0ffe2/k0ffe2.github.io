@@ -8,6 +8,7 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
+    transition: background-color 0.3s ease, color 0.3s ease; /* Добавим анимацию при смене темы */
 }
 
 .container {
@@ -21,146 +22,61 @@ body {
     width: 90%;
     max-width: 600px;
     animation: fadeIn 0.5s ease-in-out;
+    transition: background-color 0.3s ease; /* Добавим анимацию при смене темы */
 }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.input-section {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 20px;
-    width: 100%;
-}
-
-.input-section input {
-    background-color: #EEEEEE;
-    border: 1px solid #CCCCCC;
-    border-radius: 8px;
-    padding: 12px;
-    color: #333;
-    margin-bottom: 15px;
-    width: 80%;
-    max-width: 300px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
+.input-section input::placeholder,
+.info p,
+.log-section li,
+.session-button,
 .save-button {
-    background-color: #4CAF50;
-    border: none;
-    border-radius: 8px;
-    padding: 15px 20px;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-    transition: transform 0.3s ease, background-color 0.3s ease;
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    color: #333; /* Цвет текста элементов формы, параграфов, списка и кнопок */
 }
 
-.save-button i {
+.input-section input,
+.info p,
+.log-section li,
+.session-button,
+.save-button {
+    background-color: #EEEEEE; /* Цвет фона элементов */
+    border: 1px solid #CCCCCC; /* Цвет рамки */
+    color: #333; /* Цвет текста */
+}
+
+.save-button,
+.session-button {
+    background-color: #4CAF50; /* Цвет кнопок "Сохранить" и "Новая серия" */
+    color: white; /* Цвет текста кнопок */
+}
+
+.save-button:hover,
+.session-button:hover {
+    background-color: #45A049; /* Цвет при наведении на кнопки "Сохранить" и "Новая серия" */
+}
+
+.save-button i,
+.session-button i {
     margin-right: 10px;
 }
 
-.save-button:hover {
-    transform: scale(1.05);
-    background-color: #45A049;
-}
-
-.info {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    width: 100%;
-}
-
-.info p {
-    margin: 0;
-    text-align: center;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-}
-
-.session-button {
-    background-color: #3b82f6;
-    border: none;
-    border-radius: 8px;
-    padding: 10px 15px;
-    color: white;
-    cursor: pointer;
-    transition: transform 0.3s ease, background-color 0.3s ease;
-    margin: 10px 0;
-    display: flex;
-    align-items: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.session-button i {
-    margin-right: 5px;
-}
-
-.session-button:hover {
-    transform: scale(1.05);
-    background-color: #357AE8;
-}
-
 .log-section {
-    background-color: #FFFFFF;
-    padding: 10px;
-    border-radius: 12px;
-    width: 100%;
-    overflow-y: auto;
-    max-height: 300px;
-    margin-top: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.log-section ul {
-    list-style: none;
-    padding: 0;
+    background-color: #FFFFFF; /* Цвет фона секции журнала */
 }
 
 .log-section li {
-    background-color: #EEEEEE;
-    border-radius: 8px;
-    padding: 10px;
-    margin-bottom: 10px;
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #EEEEEE; /* Цвет фона элементов списка */
+    border-radius: 8px; /* Радиус скругления у элементов списка */
+    padding: 10px; /* Внутренний отступ для элементов списка */
+    margin-bottom: 10px; /* Внешний отступ между элементами списка */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Тень для элементов списка */
 }
 
 .log-section li.earning {
-    border-left: 4px solid #4CAF50;
+    border-left: 4px solid #4CAF50; /* Цвет рамки у элементов списка с классом "earning" */
 }
 
 .log-section li.expense {
-    border-left: 4px solid #f44336;
-}
-
-@media (max-width: 600px) {
-    .input-section input {
-        width: 100%;
-    }
-}
-
-.dark-theme {
-    background-color: #333;
-    color: #FFF;
+    border-left: 4px solid #f44336; /* Цвет рамки у элементов списка с классом "expense" */
 }
 
 .theme-toggle {
@@ -181,58 +97,19 @@ body {
     color: #FFF;
 }
 
-body {
-    font-family: 'Roboto', sans-serif;
-    background-color: #F7F7F7;
-    color: #333;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    transition: background-color 0.3s ease, color 0.3s ease; /* Добавим анимацию при смене темы */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-.container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: #FFFFFF;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    width: 90%;
-    max-width: 600px;
-    animation: fadeIn 0.5s ease-in-out;
-    transition: background-color 0.3s ease; /* Добавим анимацию при смене темы */
+@media (max-width: 600px) {
+    .input-section input {
+        width: 100%;
+    }
 }
-
-/* Стили для темной темы */
-.dark-theme {
-    background-color: #333;
-    color: #EEE;
-}
-
-.dark-theme .input-section input,
-.dark-theme .info p,
-.dark-theme .log-section li,
-.dark-theme .session-button,
-.dark-theme .save-button {
-    background-color: #444;
-    border-color: #666;
-    color: #EEE;
-}
-
-.dark-theme .save-button:hover,
-.dark-theme .session-button:hover {
-    background-color: #5a5a5a;
-}
-
-.dark-theme .log-section {
-    background-color: #555;
-}
-
-.dark-theme #themeToggleBtn {
-   
-

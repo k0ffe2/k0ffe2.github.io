@@ -27,7 +27,7 @@ function saveTransaction() {
 
     if (!isNaN(amount) && comment !== '') {
         const now = new Date();
-        const time = now.toLocaleTimeString('en-GB');
+        const time = now.toLocaleTimeString('ru-RU', { timeZone: 'Asia/Almaty' });
         log.unshift({ time, amount, comment });
 
         sessionEarnings += amount;
@@ -64,4 +64,4 @@ document.addEventListener('DOMContentLoaded', () => {
     sessionEarnings = parseFloat(localStorage.getItem('sessionEarnings')) || 0;
     updateDisplay();
 });
-                
+                               

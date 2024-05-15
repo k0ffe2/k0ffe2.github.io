@@ -1,7 +1,6 @@
 let totalEarnings = 0;
 let sessionEarnings = 0;
 let log = JSON.parse(localStorage.getItem('log')) || [];
-let darkModeEnabled = false; // Добавляем переменную для отслеживания состояния темы
 
 async function sendToDiscord(message) {
     const webhookURL = 'https://discord.com/api/webhooks/1240196568817205248/oJXHMG7H1HRUXp-HOfsq1PA2hlfo4n-rs73EfbOIRxeH-eiNQ8JQ8yZP-1LQVf5hsEU4'; // Замените на свой URL вебхука Discord
@@ -117,17 +116,21 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 // Обработчик события для кнопки переключения темы
 document.addEventListener('DOMContentLoaded', () => {
+    // Проверяем состояние темы из localStorage
+    const darkModeEnabled = localStorage.getItem('darkModeEnabled') === 'true';
+
+    // Применяем соответствующий класс, если темная тема была активирована
+    if (darkModeEnabled) {
+        document.body.classList.add('dark-theme');
+    }
+
+    // Обработчик события для кнопки переключения темы
     const themeToggleBtn = document.getElementById('themeToggleBtn');
-    const container = document.querySelector('.container');
-
     themeToggleBtn.addEventListener('click', () => {
-        darkModeEnabled = !darkModeEnabled; // Инвертируем значение переменной
+        // Инвертируем состояние темы
+        const isDarkModeEnabled = document.body.classList.toggle('dark-theme');
 
-        // Применяем соответствующий класс для активации/деактивации темной темы
-        if (darkModeEnabled) {
-            container.classList.add('dark-theme');
-        } else {
-            container.classList.remove('dark-theme');
-        }
+        // Сохраняем состояние темы в localStorage
+        localStorage.setItem('darkModeEnabled', isDarkModeEnabled.toString());
     });
 });

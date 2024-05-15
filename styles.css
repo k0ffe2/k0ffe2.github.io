@@ -157,3 +157,26 @@ body {
         width: 100%;
     }
 }
+
+.dark-theme {
+    background-color: #333;
+    color: #FFF;
+}
+
+.theme-toggle {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+}
+
+.theme-toggle button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 24px;
+    color: #333;
+}
+
+.theme-toggle button:hover {
+    color: #FFF;
+}

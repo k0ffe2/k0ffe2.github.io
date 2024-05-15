@@ -6,7 +6,6 @@ function updateDisplay() {
     document.getElementById('sessionEarnings').textContent = `${sessionEarnings}$`;
     document.getElementById('totalEarnings').textContent = `${totalEarnings}$`;
     displayLog();
-    updateTime();
 }
 
 function displayLog() {
@@ -28,9 +27,10 @@ function saveTransaction() {
 
     if (!isNaN(amount) && comment !== '') {
         const now = new Date();
-        const moscowTime = now.toLocaleTimeString('ru-RU', { timeZone: 'Europe/Moscow' });
-        const almatyTime = now.toLocaleTimeString('ru-RU', { timeZone: 'Asia/Almaty' });
-        log.unshift({ time: `МСК: ${moscowTime}, Алматы: ${almatyTime}`, amount, comment });
+        const moscowTime = new Date(now.toLocaleString("en-US", {timeZone: "Europe/Moscow"}));
+        const almatyTime = new Date(now.toLocaleString("en-US", {timeZone: "Asia/Almaty"}));
+        const timeString = `МСК: ${moscowTime.toLocaleTimeString()}, Алматы: ${almatyTime.toLocaleTimeString()}`;
+        log.unshift({ time: timeString, amount, comment });
 
         sessionEarnings += amount;
         totalEarnings += amount;
@@ -60,16 +60,6 @@ function resetData() {
     updateDisplay();
     localStorage.clear();
 }
-
-function updateTime() {
-    const now = new Date();
-    const moscowTime = now.toLocaleTimeString('ru-RU', { timeZone: 'Europe/Moscow' });
-    const almatyTime = now.toLocaleTimeString('ru-RU', { timeZone: 'Asia/Almaty' });
-    document.getElementById('moscowTime').textContent = moscowTime;
-    document.getElementById('almatyTime').textContent = almatyTime;
-}
-
-setInterval(updateTime, 1000);
 
 document.addEventListener('DOMContentLoaded', () => {
     totalEarnings = parseFloat(localStorage.getItem('totalEarnings')) || 0;

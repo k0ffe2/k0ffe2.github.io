@@ -159,10 +159,9 @@ function updateDisplay() {
         botList.innerHTML = '';
         bots.forEach(bot => {
             const listItem = document.createElement('li');
-            listItem.innerHTML = `
+                listItem.innerHTML = `
                 <span>${bot.name}</span>
-                <button onclick="toggleBot(${bot.id})
-">${bot.active ? 'Выключить' : 'Включить'}</button>
+                <button onclick="toggleBot(${bot.id})">${bot.active ? 'Выключить' : 'Включить'}</button>
                 <button onclick="deleteBotFromDB(${bot.id})">Удалить</button>
             `;
             botList.appendChild(listItem);

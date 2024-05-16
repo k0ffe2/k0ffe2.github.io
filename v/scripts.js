@@ -124,7 +124,8 @@ function removeBot(id) {
     deleteBotFromDB(id);
 }
 
-function startBot(bot) {
+function startBot(id) {
+    const bot = bots.find(bot => bot.id === id);
     const intervalMs = bot.interval * 60000; // Преобразовать интервал из минут в миллисекунды
     bot.intervalId = setInterval(() => {
         sendMessage(bot.token, bot.channelId, bot.message, bot.image);

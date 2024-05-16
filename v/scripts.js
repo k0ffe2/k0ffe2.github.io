@@ -20,6 +20,7 @@ request.onupgradeneeded = function(event) {
 
 request.onsuccess = function(event) {
     db = event.target.result;
+    updateDisplay();
 };
 
 function addBotToDB(name, token, channelId, interval, message, image) {
@@ -29,6 +30,7 @@ function addBotToDB(name, token, channelId, interval, message, image) {
 
     request.onsuccess = function(event) {
         console.log('Бот успешно добавлен в базу данных');
+        updateDisplay();
     };
 
     request.onerror = function(event) {
@@ -43,6 +45,7 @@ function updateBotInDB(id, name, token, channelId, interval, message, image, act
 
     request.onsuccess = function(event) {
         console.log('Данные бота успешно обновлены');
+        updateDisplay();
     };
 
     request.onerror = function(event) {
@@ -57,6 +60,7 @@ function deleteBotFromDB(id) {
 
     request.onsuccess = function(event) {
         console.log('Бот успешно удален из базы данных');
+        updateDisplay();
     };
 
     request.onerror = function(event) {
@@ -95,7 +99,6 @@ function addBot() {
     }
 
     addBotToDB(botName, token, channelId, interval, messageText, image);
-    updateDisplay();
 }
 
 function updateDisplay() {
@@ -125,4 +128,10 @@ function toggleBot(id) {
     request.onsuccess = function(event) {
         const bot = event.target.result;
         bot.active = !bot.active;
-        updateBotInDB(bot.id, bot.name,
+        updateBotInDB(bot.id, bot.name, bot.token, bot.channelId, bot.interval, bot.message, bot.image, bot.active);
+    };
+
+    request.onerror = function(event) {
+        console.error('Ошибка при получении бота:', event.target.error);
+    };
+}

@@ -31,6 +31,10 @@ function addBotToDB(name, token, channelId, interval, message, image) {
     request.onsuccess = function(event) {
         console.log('Бот успешно добавлен в базу данных');
         updateDisplay();
+        const bot = { id: event.target.result, name, token, channelId, interval, message, image, active: false };
+        if (bot.active) {
+            scheduleBot(bot);
+        }
     };
 
     request.onerror = function(event) {
@@ -82,12 +86,6 @@ function getAllBotsFromDB(callback) {
         callback([]);
     };
 }
-
-request.onsuccess = function(event) {
-    console.log('Бот успешно добавлен в базу данных');
-    updateDisplay();
-};
-
 
 function toggleBot(id) {
     const transaction = db.transaction(['bots'], 'readwrite');

@@ -1,1 +1,49 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Управление Ботами Discord</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="light-theme">
+    <div class="container">
+        <h1>Управление Ботами Discord</h1>
+        <div class="input-section">
+            <label for="bot-name">Имя Бота:</label>
+            <input type="text" id="bot-name" placeholder="Введите имя бота">
+            
+            <label for="discord-token">Discord Токен:</label>
+            <input type="text" id="discord-token" placeholder="Введите ваш Discord токен">
+            
+            <label for="channel-id">ID Канала:</label>
+            <input type="text" id="channel-id" placeholder="Введите ID канала">
+            
+            <label for="message-interval">Интервал Сообщений (в минутах):</label>
+            <input type="number" id="message-interval" min="1" value="30">
+            
+            <label for="message-text">Текст Сообщения:</label>
+            <textarea id="message-text" placeholder="Введите текст сообщения"></textarea>
+            
+            <label for="image-upload">Прикрепить Изображение:</label>
+            <input type="file" id="image-upload" accept="image/*">
+            
+            <button id="add-bot" class="save-button">Добавить Бота</button>
+        </div>
+        
+        <div class="bot-list">
+            <h2>Список Ботов</h2>
+            <ul id="bots">
+                <!-- Список ботов будет здесь -->
+            </ul>
+        </div>
+    </div>
+    
+    <div class="theme-toggle">
+        <button id="themeToggleBtn" onclick="toggleTheme()">🌙</button>
+    </div>
+    
+    <script src="scripts.js"></script>
+</body>
+</html>
 

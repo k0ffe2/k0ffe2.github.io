@@ -83,6 +83,12 @@ function getAllBotsFromDB(callback) {
     };
 }
 
+request.onsuccess = function(event) {
+    console.log('Бот успешно добавлен в базу данных');
+    updateDisplay();
+};
+
+
 function toggleBot(id) {
     const transaction = db.transaction(['bots'], 'readwrite');
     const objectStore = transaction.objectStore('bots');

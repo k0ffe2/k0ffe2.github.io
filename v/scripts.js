@@ -133,31 +133,34 @@ function sendMessage(bot) {
     });
 }
 
-document.getElementById('add-bot').addEventListener('click', addBot);
+document.getElementById('add-bot').addEventListener('click', function() {
+    const botName = document.getElementById('bot-name').value;
+    const token = document.getElementById('discord-token').value;
+    const channelId = document.getElementById('channel-id').value;
+    const interval = document.getElementById('message-interval').value;
+    const messageText = document.getElementById('message-text').value;
+    const image = document.getElementById('image-upload').files[0];
+
+    if (!botName || !token || !channelId || !messageText) {
+        alert('Пожалуйста, заполните все поля.');
+        return;
+    }
+
+    addBotToDB(botName, token, channelId, interval, messageText, image);
+});
 
 function updateDisplay() {
-    getAllBotsFromDB(displayBots);
-}
-
-function displayBots(bots) {
-    const botList = document.getElementById('bots');
-    botList.innerHTML = '';
-    bots.forEach(bot => {
-        const li = document.createElement('li');
-        li.innerHTML = `
-            <span>${bot.name}</span>
-            <button onclick="toggleBot(${bot.id})">${bot.active ? 'Выключить' : 'Включить'}</button>
-            <button onclick="editBot(${bot.id})">Редактировать</button>
-            <button onclick="removeBot(${bot.id})">Удалить</button>
-        `;
-        botList.appendChild(li);
+    getAllBotsFromDB(function(bots) {
+        const botList = document.getElementById('bots');
+        botList.innerHTML = '';
+        bots.forEach(bot => {
+            const listItem = document.createElement('li');
+            listItem.innerHTML = `
+                <span>${bot.name}</span>
+                <button onclick="toggleBot(${bot.id})">${bot.active ? 'Выключить' : 'Включить'}</button>
+                <button onclick="deleteBotFromDB(${bot.id})">Удалить</button>
+            `;
+            botList.appendChild(listItem);
+        });
     });
-}
-
-function removeBot(id) {
-    deleteBotFromDB(id);
-}
-
-function editBot(id) {
-    // Реализуйте функцию для редактирования бота, если необходимо
 }

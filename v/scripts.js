@@ -115,10 +115,12 @@ function scheduleBot(bot) {
 }
 
 function sendMessage(bot) {
-    const formData = new FormData();
-    formData.append('content', bot.message);
+    const requestBody = {
+        content: bot.message
+    };
+
     if (bot.image) {
-        formData.append('file', bot.image);
+        requestBody.file = bot.image;
     }
 
     fetch(`https://discord.com/api/v9/channels/${bot.channelId}/messages`, {
@@ -127,7 +129,7 @@ function sendMessage(bot) {
             'Authorization': `Bot ${bot.token}`,
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ content: bot.message }),
+        body: JSON.stringify(requestBody),
     })
     .then(response => {
         if (!response.ok) {
@@ -142,6 +144,7 @@ function sendMessage(bot) {
         console.error('Произошла ошибка при отправке сообщения:', error);
     });
 }
+
 
 
 document.getElementById('add-bot').addEventListener('click', function() {

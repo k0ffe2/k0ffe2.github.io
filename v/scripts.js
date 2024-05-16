@@ -155,4 +155,5 @@ function sendMessage(token, channelId, message, image) {
     })
     .catch(error => {
         console.error('Ошибка при отправке сообщения:', error);
-   
+    });
+}

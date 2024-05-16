@@ -15,6 +15,7 @@ request.onupgradeneeded = function(event) {
     objectStore.createIndex('interval', 'interval', { unique: false });
     objectStore.createIndex('message', 'message', { unique: false });
     objectStore.createIndex('image', 'image', { unique: false });
+    objectStore.createIndex('active', 'active', { unique: false });
 };
 
 request.onsuccess = function(event) {
@@ -124,51 +125,4 @@ function toggleBot(id) {
     request.onsuccess = function(event) {
         const bot = event.target.result;
         bot.active = !bot.active;
-        updateBotInDB(bot.id, bot.name, bot.token, bot.channelId, bot.interval, bot.message, bot.image, bot.active);
-        updateDisplay();
-    };
-
-    request.onerror = function(event) {
-        console.error('Ошибка при получении бота для переключения:', event.target.error);
-    };
-}
-
-function removeBot(id) {
-    deleteBotFromDB(id);
-    updateDisplay();
-}
-
-function editBot(id) {
-    const newName = prompt('Введите новое имя бота:');
-    if (newName) {
-        const transaction = db.transaction(['bots'], 'readwrite');
-        const objectStore = transaction.objectStore('bots');
-        const request = objectStore.get(id);
-
-        request.onsuccess = function(event) {
-            const bot = event.target.result;
-            bot.name = newName;
-            updateBotInDB(bot.id, bot.name, bot.token, bot.channelId, bot.interval, bot.message, bot.image, bot.active);
-            updateDisplay();
-        };
-
-        request.onerror = function(event) {
-            console.error('Ошибка при получении бота для редактирования:', event.target.error);
-        };
-    }
-}
-
-function toggleTheme() {
-    const body = document.body;
-    const themeToggleBtn = document.getElementById('themeToggleBtn');
-
-    if (body.classList.contains('light-theme')) {
-        body.classList.remove('light-theme');
-        body.classList.add('dark-theme');
-        themeToggleBtn.textContent = '☀️';
-    } else {
-        body.classList.remove('dark-theme');
-        body.classList.add('light-theme');
-        themeToggleBtn.textContent = '🌙';
-    }
-}
+        updateBotInDB(bot.id, bot.name,

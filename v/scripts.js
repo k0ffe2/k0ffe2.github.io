@@ -121,26 +121,28 @@ function sendMessage(bot) {
         formData.append('file', bot.image);
     }
 
-fetch(`https://discord.com/api/v9/channels/${bot.channelId}/messages`, {
-    method: 'POST',
-    headers: {
-        'Authorization': `Bot ${bot.token}`,
-        'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ content: messageText }),
-})
-.then(response => {
-    if (!response.ok) {
-        throw new Error('Ошибка сети или сервера. Пожалуйста, попробуйте снова.');
-    }
-    return response.json();
-})
-.then(data => {
-    console.log('Сообщение успешно отправлено:', data);
-})
-.catch(error => {
-    console.error('Произошла ошибка при отправке сообщения:', error);
-});
+    fetch(`https://discord.com/api/v9/channels/${bot.channelId}/messages`, {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bot ${bot.token}`,
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ content: bot.message }),
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Ошибка сети или сервера. Пожалуйста, попробуйте снова.');
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Сообщение успешно отправлено:', data);
+    })
+    .catch(error => {
+        console.error('Произошла ошибка при отправке сообщения:', error);
+    });
+}
+
 
 document.getElementById('add-bot').addEventListener('click', function() {
     const botName = document.getElementById('bot-name').value;

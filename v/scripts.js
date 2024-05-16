@@ -83,23 +83,57 @@ function getAllBotsFromDB(callback) {
     };
 }
 
-document.getElementById('add-bot').addEventListener('click', addBot);
+function toggleBot(id) {
+    const transaction = db.transaction(['bots'], 'readwrite');
+    const objectStore = transaction.objectStore('bots');
+    const request = objectStore.get(id);
 
-function addBot() {
-    const botName = document.getElementById('bot-name').value;
-    const token = document.getElementById('discord-token').value;
-    const channelId = document.getElementById('channel-id').value;
-    const interval = document.getElementById('message-interval').value;
-    const messageText = document.getElementById('message-text').value;
-    const image = document.getElementById('image-upload').files[0];
+    request.onsuccess = function(event) {
+        const bot = event.target.result;
+        bot.active = !bot.active;
+        updateBotInDB(bot.id, bot.name, bot.token, bot.channelId, bot.interval, bot.message, bot.image, bot.active);
+        if (bot.active) {
+            scheduleBot(bot);
+        } else {
+            clearInterval(bot.intervalId);
+        }
+    };
 
-    if (!botName || !token || !channelId || !messageText) {
-        alert('Пожалуйста, заполните все поля.');
-        return;
+    request.onerror = function(event) {
+        console.error('Ошибка при получении бота:', event.target.error);
+    };
+}
+
+function scheduleBot(bot) {
+    bot.intervalId = setInterval(() => {
+        sendMessage(bot);
+    }, bot.interval * 60000); // переводим в миллисекунды
+}
+
+function sendMessage(bot) {
+    const formData = new FormData();
+    formData.append('content', bot.message);
+    if (bot.image) {
+        formData.append('file', bot.image);
     }
 
-    addBotToDB(botName, token, channelId, interval, messageText, image);
+    fetch(`https://discord.com/api/v9/channels/${bot.channelId}/messages`, {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bot ${bot.token}`
+        },
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Сообщение отправлено:', data);
+    })
+    .catch(error => {
+        console.error('Ошибка при отправке сообщения:', error);
+    });
 }
+
+document.getElementById('add-bot').addEventListener('click', addBot);
 
 function updateDisplay() {
     getAllBotsFromDB(displayBots);
@@ -120,18 +154,10 @@ function displayBots(bots) {
     });
 }
 
-function toggleBot(id) {
-    const transaction = db.transaction(['bots'], 'readwrite');
-    const objectStore = transaction.objectStore('bots');
-    const request = objectStore.get(id);
+function removeBot(id) {
+    deleteBotFromDB(id);
+}
 
-    request.onsuccess = function(event) {
-        const bot = event.target.result;
-        bot.active = !bot.active;
-        updateBotInDB(bot.id, bot.name, bot.token, bot.channelId, bot.interval, bot.message, bot.image, bot.active);
-    };
-
-    request.onerror = function(event) {
-        console.error('Ошибка при получении бота:', event.target.error);
-    };
+function editBot(id) {
+    // Реализуйте функцию для редактирования бота, если необходимо
 }

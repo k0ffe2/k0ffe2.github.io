@@ -1,3 +1,86 @@
+let db;
+
+const request = window.indexedDB.open('botsDB', 1);
+
+request.onerror = function(event) {
+    console.error('Ошибка открытия базы данных:', event.target.errorCode);
+};
+
+request.onupgradeneeded = function(event) {
+    const db = event.target.result;
+    const objectStore = db.createObjectStore('bots', { keyPath: 'id', autoIncrement: true });
+    objectStore.createIndex('name', 'name', { unique: false });
+    objectStore.createIndex('token', 'token', { unique: true });
+    objectStore.createIndex('channelId', 'channelId', { unique: false });
+    objectStore.createIndex('interval', 'interval', { unique: false });
+    objectStore.createIndex('message', 'message', { unique: false });
+    objectStore.createIndex('image', 'image', { unique: false });
+
+    console.log('База данных готова к использованию');
+};
+
+request.onsuccess = function(event) {
+    db = event.target.result;
+    console.log('База данных успешно открыта');
+};
+
+function addBotToDB(name, token, channelId, interval, message, image) {
+    const transaction = db.transaction(['bots'], 'readwrite');
+    const objectStore = transaction.objectStore('bots');
+    const request = objectStore.add({ name, token, channelId, interval, message, image });
+
+    request.onsuccess = function(event) {
+        console.log('Бот успешно добавлен в базу данных');
+    };
+
+    request.onerror = function(event) {
+        console.error('Ошибка при добавлении бота:', event.target.error);
+    };
+}
+
+function updateBotInDB(id, name, token, channelId, interval, message, image) {
+    const transaction = db.transaction(['bots'], 'readwrite');
+    const objectStore = transaction.objectStore('bots');
+    const request = objectStore.put({ id, name, token, channelId, interval, message, image });
+
+    request.onsuccess = function(event) {
+        console.log('Данные бота успешно обновлены');
+    };
+
+    request.onerror = function(event) {
+        console.error('Ошибка при обновлении данных бота:', event.target.error);
+    };
+}
+
+function deleteBotFromDB(id) {
+    const transaction = db.transaction(['bots'], 'readwrite');
+    const objectStore = transaction.objectStore('bots');
+    const request = objectStore.delete(id);
+
+    request.onsuccess = function(event) {
+        console.log('Бот успешно удален из базы данных');
+    };
+
+    request.onerror = function(event) {
+        console.error('Ошибка при удалении бота:', event.target.error);
+    };
+}
+
+function getAllBotsFromDB(callback) {
+    const transaction = db.transaction(['bots'], 'readonly');
+    const objectStore = transaction.objectStore('bots');
+    const request = objectStore.getAll();
+
+    request.onsuccess = function(event) {
+        callback(event.target.result);
+    };
+
+    request.onerror = function(event) {
+        console.error('Ошибка при получении списка ботов:', event.target.error);
+        callback([]);
+    };
+}
+
 document.getElementById('add-bot').addEventListener('click', addBot);
 
 function addBot() {
@@ -13,49 +96,30 @@ function addBot() {
         return;
     }
 
-    const botItem = document.createElement('li');
-    botItem.innerHTML = `
-        <span>${botName}</span>
-        <button onclick="removeBot(this)">Удалить</button>
-    `;
-    document.getElementById('bots').appendChild(botItem);
-
-    scheduleBot(token, channelId, messageText, interval, image);
+    addBotToDB(botName, token, channelId, interval, messageText, image);
+    updateDisplay();
 }
 
-function removeBot(button) {
-    button.parentElement.remove();
+function updateDisplay() {
+    getAllBotsFromDB(displayBots);
 }
 
-function scheduleBot(token, channelId, message, interval, image) {
-    const intervalMs = interval * 60 * 1000;
-
-    setInterval(() => {
-        sendMessage(token, channelId, message, image);
-    }, intervalMs);
-}
-
-function sendMessage(token, channelId, message, image) {
-    const formData = new FormData();
-    formData.append('content', message);
-    if (image) {
-        formData.append('file', image);
-    }
-
-    fetch(`https://discord.com/api/v9/channels/${channelId}/messages`, {
-        method: 'POST',
-        headers: {
-            'Authorization': `Bot ${token}`
-        },
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log('Сообщение отправлено:', data);
-    })
-    .catch(error => {
-        console.error('Ошибка при отправке сообщения:', error);
+function displayBots(bots) {
+    const botList = document.getElementById('bots');
+    botList.innerHTML = '';
+    bots.forEach(bot => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+            <span>${bot.name}</span>
+            <button onclick="removeBot(${bot.id})">Удалить</button>
+        `;
+        botList.appendChild(li);
     });
+}
+
+function removeBot(id) {
+    deleteBotFromDB(id);
+    updateDisplay();
 }
 
 function toggleTheme() {

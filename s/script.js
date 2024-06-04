@@ -74,15 +74,11 @@ document.getElementById('applicationForm').addEventListener('submit', async (e) 
 
     const notification = document.getElementById('notification');
     notification.classList.remove('hidden');
-    notification.style.display = 'block';
-    notification.style.opacity = 1;
+    notification.classList.add('notification-visible');
 
     setTimeout(() => {
-        notification.style.opacity = 0;
-        setTimeout(() => {
-            notification.classList.add('hidden');
-            notification.style.display = 'none';
-        }, 500);
+        notification.classList.remove('notification-visible');
+        notification.classList.add('hidden');
     }, 5000);
 
     document.getElementById('applicationForm').reset();

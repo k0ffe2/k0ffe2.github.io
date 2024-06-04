@@ -77,3 +77,8 @@ button:hover {
 .hidden {
     display: none;
 }
+
+.notification-visible {
+    display: block;
+    opacity: 1;
+}

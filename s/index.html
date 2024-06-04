@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Заявка на вступление</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="form-container">
+        <h1>Заявка на вступление</h1>
+        <form id="applicationForm">
+            <label for="name">Ваше имя</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="age">Возраст</label>
+            <input type="number" id="age" name="age" required>
+
+            <label for="timezone">Часовой пояс</label>
+            <input type="text" id="timezone" name="timezone" required>
+
+            <label for="experience">Откат стрельбы</label>
+            <input type="text" id="experience" name="experience" required>
+
+            <label for="gameName">Никнейм в игре</label>
+            <input type="text" id="gameName" name="gameName" required>
+
+            <label for="about">О себе</label>
+            <textarea id="about" name="about" required></textarea>
+
+            <label for="discord">Ваш дискорд</label>
+            <input type="text" id="discord" name="discord" required>
+
+            <button type="submit">Отправить</button>
+        </form>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

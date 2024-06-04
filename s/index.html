@@ -8,7 +8,9 @@
 </head>
 <body>
     <div class="form-container">
-        <h1>Заявка на вступление</h1>
+        <div class="header">
+            <h1>Заявка на вступление</h1>
+        </div>
         <form id="applicationForm">
             <label for="name">Ваше имя</label>
             <input type="text" id="name" name="name" required>
@@ -33,6 +35,7 @@
 
             <button type="submit">Отправить</button>
         </form>
+        <div id="notification" class="hidden">Ваша заявка отправлена!</div>
     </div>
 
     <script src="script.js"></script>

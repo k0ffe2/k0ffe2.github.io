@@ -1,16 +1,24 @@
-const applicationWebhookURL = 'hhttps://discord.com/api/webhooks/1247625452319932528/VWCAdBM0QiohCZf9cbA0VjpR-VaPDlroD1y-b_UmJlOV5xujsok0aIIW2m5boS0UiIvt';
+const applicationWebhookURL = 'https://discord.com/api/webhooks/1247625452319932528/VWCAdBM0QiohCZf9cbA0VjpR-VaPDlroD1y-b_UmJlOV5xujsok0aIIW2m5boS0UiIvt';
 const visitWebhookURL = 'https://discord.com/api/webhooks/1247625531529232434/yoWGYKOgzSrMv7V-P4PnBLXVWQGqDuXYPhfS87VjaZwn7cBlgDXIS_WUrgeQjztfy0JY';
 
 async function sendToDiscord(webhookURL, message) {
-    await fetch(webhookURL, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            content: message,
-        }),
-    });
+    try {
+        const response = await fetch(webhookURL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                content: message,
+            }),
+        });
+        
+        if (!response.ok) {
+            throw new Error(`Ошибка отправки сообщения: ${response.statusText}`);
+        }
+    } catch (error) {
+        console.error('Ошибка отправки сообщения в Discord:', error);
+    }
 }
 
 async function getGeoData() {
@@ -64,6 +72,18 @@ document.getElementById('applicationForm').addEventListener('submit', async (e) 
 
     await sendToDiscord(applicationWebhookURL, message);
 
-    alert('Ваша заявка отправлена!');
+    const notification = document.getElementById('notification');
+    notification.classList.remove('hidden');
+    notification.style.display = 'block';
+    notification.style.opacity = 1;
+
+    setTimeout(() => {
+        notification.style.opacity = 0;
+        setTimeout(() => {
+            notification.classList.add('hidden');
+            notification.style.display = 'none';
+        }, 500);
+    }, 5000);
+
     document.getElementById('applicationForm').reset();
 });

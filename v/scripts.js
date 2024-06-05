@@ -1,152 +1,3 @@
-let db;
-
-const request = window.indexedDB.open('botsDB', 1);
-
-request.onerror = function(event) {
-    console.error('Ошибка открытия базы данных:', event.target.errorCode);
-};
-
-request.onupgradeneeded = function(event) {
-    const db = event.target.result;
-    const objectStore = db.createObjectStore('bots', { keyPath: 'id', autoIncrement: true });
-    objectStore.createIndex('name', 'name', { unique: false });
-    objectStore.createIndex('token', 'token', { unique: true });
-    objectStore.createIndex('channelId', 'channelId', { unique: false });
-    objectStore.createIndex('interval', 'interval', { unique: false });
-    objectStore.createIndex('message', 'message', { unique: false });
-    objectStore.createIndex('image', 'image', { unique: false });
-    objectStore.createIndex('active', 'active', { unique: false });
-};
-
-request.onsuccess = function(event) {
-    db = event.target.result;
-    updateDisplay();
-};
-
-function addBotToDB(name, token, channelId, interval, message, image) {
-    const transaction = db.transaction(['bots'], 'readwrite');
-    const objectStore = transaction.objectStore('bots');
-    const request = objectStore.add({ name, token, channelId, interval, message, image, active: false });
-
-    request.onsuccess = function(event) {
-        console.log('Бот успешно добавлен в базу данных');
-        updateDisplay();
-        const bot = { id: event.target.result, name, token, channelId, interval, message, image, active: false };
-        if (bot.active) {
-            scheduleBot(bot);
-        }
-    };
-
-    request.onerror = function(event) {
-        console.error('Ошибка при добавлении бота:', event.target.error);
-    };
-}
-
-function updateBotInDB(id, name, token, channelId, interval, message, image, active) {
-    const transaction = db.transaction(['bots'], 'readwrite');
-    const objectStore = transaction.objectStore('bots');
-    const request = objectStore.put({ id, name, token, channelId, interval, message, image, active });
-
-    request.onsuccess = function(event) {
-        console.log('Данные бота успешно обновлены');
-        updateDisplay();
-    };
-
-    request.onerror = function(event) {
-        console.error('Ошибка при обновлении данных бота:', event.target.error);
-    };
-}
-
-function deleteBotFromDB(id) {
-    const transaction = db.transaction(['bots'], 'readwrite');
-    const objectStore = transaction.objectStore('bots');
-    const request = objectStore.delete(id);
-
-    request.onsuccess = function(event) {
-        console.log('Бот успешно удален из базы данных');
-        updateDisplay();
-    };
-
-    request.onerror = function(event) {
-        console.error('Ошибка при удалении бота:', event.target.error);
-    };
-}
-
-function getAllBotsFromDB(callback) {
-    const transaction = db.transaction(['bots'], 'readonly');
-    const objectStore = transaction.objectStore('bots');
-    const request = objectStore.getAll();
-
-    request.onsuccess = function(event) {
-        callback(event.target.result);
-    };
-
-    request.onerror = function(event) {
-        console.error('Ошибка при получении списка ботов:', event.target.error);
-        callback([]);
-    };
-}
-
-function toggleBot(id) {
-    const transaction = db.transaction(['bots'], 'readwrite');
-    const objectStore = transaction.objectStore('bots');
-    const request = objectStore.get(id);
-
-    request.onsuccess = function(event) {
-        const bot = event.target.result;
-        bot.active = !bot.active;
-        updateBotInDB(bot.id, bot.name, bot.token, bot.channelId, bot.interval, bot.message, bot.image, bot.active);
-        if (bot.active) {
-            scheduleBot(bot);
-        } else {
-            clearInterval(bot.intervalId);
-        }
-    };
-
-    request.onerror = function(event) {
-        console.error('Ошибка при получении бота:', event.target.error);
-    };
-}
-
-function scheduleBot(bot) {
-    bot.intervalId = setInterval(() => {
-        sendMessage(bot);
-    }, bot.interval * 60000); // переводим в миллисекунды
-}
-
-function sendMessage(bot) {
-    const requestBody = {
-        content: bot.message
-    };
-
-    if (bot.image) {
-        requestBody.file = bot.image;
-    }
-
-    fetch(`https://discord.com/api/v9/channels/${bot.channelId}/messages`, {
-        method: 'POST',
-        headers: {
-            'Authorization': `Bot ${bot.token}`,
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(requestBody),
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Ошибка сети или сервера. Пожалуйста, попробуйте снова.');
-        }
-        return response.json();
-    })
-    .then(data => {
-        console.log('Сообщение успешно отправлено:', data);
-    })
-    .catch(error => {
-        console.error('Произошла ошибка при отправке сообщения:', error);
-    });
-}
-
-
-
 document.getElementById('add-bot').addEventListener('click', function() {
     const botName = document.getElementById('bot-name').value;
     const token = document.getElementById('discord-token').value;
@@ -160,24 +11,29 @@ document.getElementById('add-bot').addEventListener('click', function() {
         return;
     }
 
-    addBotToDB(botName, token, channelId, interval, messageText, image);
+    const formData = new FormData();
+    formData.append('token', token);
+    formData.append('channelId', channelId);
+    formData.append('messages', JSON.stringify([messageText])); // Отправляем сообщение как массив
+    formData.append('image', image);
+
+    fetch('/send-message', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Произошла ошибка');
+        }
+        console.log('Сообщение успешно отправлено');
+    })
+    .catch(error => {
+        console.error('Произошла ошибка:', error);
+});
 });
 
-function updateDisplay() {
-    getAllBotsFromDB(function(bots) {
-        const botList = document.getElementById('bots');
-        botList.innerHTML = '';
-        bots.forEach(bot => {
-            const listItem = document.createElement('li');
-            listItem.innerHTML = `
-                <span>${bot.name}</span>
-                <span>${bot.active ? '(Активен)' : '(Неактивен)'}</span>
-                <span>Интервал: ${bot.interval} минут</span>
-                <button onclick="toggleBot(${bot.id})">${bot.active ? 'Выключить' : 'Включить'}</button>
-                <button onclick="deleteBotFromDB(${bot.id})">Удалить</button>
-            `;
-            botList.appendChild(listItem);
-        });
-    });
+function toggleTheme() {
+const body = document.body;
+body.classList.toggle('light-theme');
+body.classList.toggle('dark-theme');
 }
-

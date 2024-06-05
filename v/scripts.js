@@ -33,7 +33,7 @@ function addBotToDB(name, token, channelId, interval, message, image) {
         updateDisplay();
         const bot = { id: event.target.result, name, token, channelId, interval, message, image, active: false };
         if (bot.active) {
-            toggleBot(bot.id); // Автоматически включаем бота после добавления
+            scheduleBot(bot);
         }
     };
 
@@ -120,7 +120,6 @@ function sendMessage(bot) {
     };
 
     if (bot.image) {
-        // Если изображение выбрано, добавляем его в запрос
         requestBody.file = bot.image;
     }
 
@@ -146,13 +145,15 @@ function sendMessage(bot) {
     });
 }
 
+
+
 document.getElementById('add-bot').addEventListener('click', function() {
     const botName = document.getElementById('bot-name').value;
     const token = document.getElementById('discord-token').value;
     const channelId = document.getElementById('channel-id').value;
     const interval = document.getElementById('message-interval').value;
     const messageText = document.getElementById('message-text').value;
-    const image = document.getElementById('image-upload').files[0]; // Получение изображения
+    const image = document.getElementById('image-upload').files[0];
 
     if (!botName || !token || !channelId || !messageText) {
         alert('Пожалуйста, заполните все поля.');
@@ -170,7 +171,8 @@ function updateDisplay() {
             const listItem = document.createElement('li');
             listItem.innerHTML = `
                 <span>${bot.name}</span>
-                <span>Интервал: ${bot.interval} минут</span> <!-- Добавлен таймер -->
+                <span>${bot.active ? '(Активен)' : '(Неактивен)'}</span>
+                <span>Интервал: ${bot.interval} минут</span>
                 <button onclick="toggleBot(${bot.id})">${bot.active ? 'Выключить' : 'Включить'}</button>
                 <button onclick="deleteBotFromDB(${bot.id})">Удалить</button>
             `;
@@ -178,3 +180,4 @@ function updateDisplay() {
         });
     });
 }
+

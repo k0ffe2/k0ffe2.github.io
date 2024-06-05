@@ -33,7 +33,7 @@ function addBotToDB(name, token, channelId, interval, message, image) {
         updateDisplay();
         const bot = { id: event.target.result, name, token, channelId, interval, message, image, active: false };
         if (bot.active) {
-            scheduleBot(bot);
+            toggleBot(bot.id); // Автоматически включаем бота после добавления
         }
     };
 
@@ -146,7 +146,6 @@ function sendMessage(bot) {
     });
 }
 
-// Обработчик нажатия на кнопку "Добавить бота"
 document.getElementById('add-bot').addEventListener('click', function() {
     const botName = document.getElementById('bot-name').value;
     const token = document.getElementById('discord-token').value;
@@ -171,6 +170,7 @@ function updateDisplay() {
             const listItem = document.createElement('li');
             listItem.innerHTML = `
                 <span>${bot.name}</span>
+                <span>Интервал: ${bot.interval} минут</span> <!-- Добавлен таймер -->
                 <button onclick="toggleBot(${bot.id})">${bot.active ? 'Выключить' : 'Включить'}</button>
                 <button onclick="deleteBotFromDB(${bot.id})">Удалить</button>
             `;

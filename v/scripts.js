@@ -120,6 +120,7 @@ function sendMessage(bot) {
     };
 
     if (bot.image) {
+        // Если изображение выбрано, добавляем его в запрос
         requestBody.file = bot.image;
     }
 
@@ -145,15 +146,14 @@ function sendMessage(bot) {
     });
 }
 
-
-
+// Обработчик нажатия на кнопку "Добавить бота"
 document.getElementById('add-bot').addEventListener('click', function() {
     const botName = document.getElementById('bot-name').value;
     const token = document.getElementById('discord-token').value;
     const channelId = document.getElementById('channel-id').value;
     const interval = document.getElementById('message-interval').value;
     const messageText = document.getElementById('message-text').value;
-    const image = document.getElementById('image-upload').files[0];
+    const image = document.getElementById('image-upload').files[0]; // Получение изображения
 
     if (!botName || !token || !channelId || !messageText) {
         alert('Пожалуйста, заполните все поля.');
@@ -169,7 +169,7 @@ function updateDisplay() {
         botList.innerHTML = '';
         bots.forEach(bot => {
             const listItem = document.createElement('li');
-                listItem.innerHTML = `
+            listItem.innerHTML = `
                 <span>${bot.name}</span>
                 <button onclick="toggleBot(${bot.id})">${bot.active ? 'Выключить' : 'Включить'}</button>
                 <button onclick="deleteBotFromDB(${bot.id})">Удалить</button>

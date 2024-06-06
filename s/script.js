@@ -155,13 +155,6 @@ document.getElementById('applicationForm').addEventListener('submit', async (e) 
     notification.classList.remove('hidden');
     notification.classList.add('notification-visible');
 
-        // Проверка прохождения reCAPTCHA
-    const token = grecaptcha.getResponse();
-    if (!token) {
-        alert('Пожалуйста, пройдите проверку reCAPTCHA!');
-        return;
-    }
-
     setTimeout(() => {
         notification.classList.remove('notification-visible');
         notification.classList.add('hidden');

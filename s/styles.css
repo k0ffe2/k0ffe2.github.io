@@ -75,7 +75,7 @@ button:hover {
 }
 
 .hidden {
-    display: none;
+    display: none; 
 }
 
 .notification-visible {

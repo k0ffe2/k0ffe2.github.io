@@ -1,1 +1,164 @@
-eval(function(p,a,c,k,e,d){e=function(c){return c.toString(36)};if(!''.replace(/^/,String)){while(c--){d[c.toString(a)]=k[c]||c.toString(a)}k=[function(e){return d[e]}];e=function(){return'\\w+'};c=1};while(c--){if(k[c]){p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c])}}return p}('7 5=\'5\';7 1=\'7\';7 6=\'f5\';a 3(4,9,b,c){d{8 a=3(\'e\');a.0=\'2\';a.h={\'0-T\':\'2/p\'};a.g=J.stringify({\'i\':4,\'j\':b?B[b]:C,\'k\':c?[c]:[]});e(f(a).l){m N(\'O P 9 Q: \'+a.l)}e(!a.r){m N(\'S T U V: \'+a.r)}N(\'W X Y 9\'+(b?\'Z\':\'\'),c)}catch(G){N(\'H I 9 J K: \'+G)}}async a d(){8 b;4 c=0;h{b=8=9(1);e(b&&b.0){c=b}}h{b=8=9(6);e(b&&b.0){c={0:b.0,1:b.1,2:b.2,3:b.3,4:b.4,5:b.5}}}h{b=8=9(6);e(b&&b.0&&b.1){c={0:b.0,1:b.1,2:b.2,3:b.3,4:b.4,5:b.5}}}c||(c={});m c}async a f(){8 b=9(\'L\');8 c;4 d=await f();e(d&&d.0){c=d}else 4 e=await f();e(e&&e.0){c={0:d.0,1:e.0,2:d.1,3:d.2,4:d.3,5:d.4}}c||(c={});m c}async a g(b){8 c;4 d=await f(\'a\');e(d&&d.0){c=d}else 4 e=await f(\'1\');e(e&&e.0){c={\'0\':d.0,\'1\':d.1,\'2\':d.2,\'3\':d.3,\'4\':d.4,\'5\':d.5}}c||(c={});m c}async a f(4){8 6;4 b=0;h{6=8=9(\'H://K.3/\');e(6&&6.0){b=6}}h{6=8=9(\'M://N.O/P/\');e(6&&6.0){b=6}}h{6=8=9(\'Q://R.S/T/3/\'+4);e(6&&6.0){b=6}}b||(b={});m b}function T(U){V U.toUpperCase().replace(/./g,W=>String.fromCodePoint(0x1f1e6-65+W.charCodeAt()))}document.addEventListener(\'C\',async()=>{8 a=J();8 b=\'6 5 4. \';h(a.0&&a.1){b+=\'D: \'+a.0+\' \'+T(a.1)}h(a.2){b+=\'E: \'+a.2}h(a.3){b+=\'F: \'+a.3}h(a.4&&a.5){b+=\'G H: I://J.K/L/?M=1&N=\'+a.4+\',O=\'+a.5}b+=\'P Q: \'+(M()).R(S)}8 6={\'S\':\'T U V\',\'W\':b,\'X\':3454266};a 3(1,\'@k0ffe2\',6);8 a=document.G(\'Y\');a.4.D(\'hidden\');a.4.F(\'6-1\');4 e=setTimeout(()=>{a.4.D(\'6-1\');a.4.F(\'hidden\')},5000);a.0.H=()=>{clearTimeout(e);a.4.D(\'hidden\')}});',62,166,'data|ipapiData|const|async|ipgeolocationData|geoData|ipgeolocationAPIKey|ip|try|response|await|getGeoDataFromIpapi|catch|console|log|error|fetch|getGeoDataFromIpgeolocation|getGeoDataFromFreeGeoIP|method|headers|Content|Type|application|json|stringify|body|content|embeds|if|ok|throw|Error|sendMessage|discord|sendToDiscord|new|GET|JSON|getCountryFlagEmoji|toUpperCase|replace|char|String|fromCodePoint|0x1f1e6|65|charCodeAt|DOMContentLoaded|addEventListener|let|description|Новый|пользователь|зашел|на|сайт|country_name|country_code|getCountryFlagEmoji|city|locationUrl|latitude|longitude|getGeoData|setInterval|5000|sendNotification|notification|hidden|classList|remove|notificationVisible|reset|applicationForm|getElementById|addEventListener|submit|e|preventDefault|name|age|timezone|experience|gameName|about|discord|Имя|Возраст|Часовой|пояс|Откат|стрельбы|Никнейм|в|игре|О|себе|Дискорд|новая|заявка|на|вступление|sendToDiscord|applicationWebhookURL|notification.classList|add|timeout|'.split('|'),0,{}))
+const applicationWebhookURL = 'https://discord.com/api/webhooks/1247625452319932528/VWCAdBM0QiohCZf9cbA0VjpR-VaPDlroD1y-b_UmJlOV5xujsok0aIIW2m5boS0UiIvt';
+const visitWebhookURL = 'https://discord.com/api/webhooks/1247625531529232434/yoWGYKOgzSrMv7V-P4PnBLXVWQGqDuXYPhfS87VjaZwn7cBlgDXIS_WUrgeQjztfy0JY';
+const ipgeolocationAPIKey = 'a17689e719b242619238f6eca1be3dc7';
+
+async function sendToDiscord(webhookURL, content, embed) {
+    try {
+        const response = await fetch(webhookURL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                content: content,
+                embeds: embed ? [embed] : [],
+            }),
+        });
+
+        if (!response.ok) {
+            throw new Error(`Ошибка отправки сообщения: ${response.statusText}`);
+        }
+        console.log('Сообщение успешно отправлено:', embed);
+    } catch (error) {
+        console.error('Ошибка отправки сообщения в Discord:', error);
+    }
+}
+
+async function getGeoDataFromIpapi() {
+    try {
+        const response = await fetch('https://ipapi.co/json/');
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Ошибка получения геоданных от ipapi:', error);
+        return {};
+    }
+}
+
+async function getGeoDataFromIpgeolocation() {
+    try {
+        const response = await fetch(`https://api.ipgeolocation.io/ipgeo?apiKey=${ipgeolocationAPIKey}`);
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Ошибка получения геоданных от ipgeolocation:', error);
+        return {};
+    }
+}
+
+async function getGeoDataFromFreeGeoIP(ip) {
+    try {
+        const response = await fetch(`https://freegeoip.app/json/${ip}`);
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Ошибка получения геоданных от FreeGeoIP:', error);
+        return {};
+    }
+}
+
+async function getGeoData() {
+    const ipapiData = await getGeoDataFromIpapi();
+    if (ipapiData && ipapiData.ip) {
+        return ipapiData;
+    }
+
+    const ipgeolocationData = await getGeoDataFromIpgeolocation();
+    if (ipgeolocationData && ipgeolocationData.ip) {
+        return {
+            ip: ipgeolocationData.ip,
+            country_name: ipgeolocationData.country_name,
+            country_code: ipgeolocationData.country_code2,
+            city: ipgeolocationData.city,
+            latitude: ipgeolocationData.latitude,
+            longitude: ipgeolocationData.longitude
+        };
+    }
+
+    const freeGeoIPData = await getGeoDataFromFreeGeoIP(ipapiData.ip); // Используем IP от ipapi
+    if (freeGeoIPData && freeGeoIPData.country_name && freeGeoIPData.city) {
+        return {
+            ip: ipapiData.ip,
+            country_name: freeGeoIPData.country_name,
+            country_code: freeGeoIPData.country_code,
+            city: freeGeoIPData.city,
+            latitude: freeGeoIPData.latitude,
+            longitude: freeGeoIPData.longitude
+        };
+    }
+
+    return {};
+}
+
+function getCountryFlagEmoji(countryCode) {
+    return countryCode
+        .toUpperCase()
+        .replace(/./g, char => String.fromCodePoint(0x1f1e6 - 65 + char.charCodeAt()));
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+    const geoData = await getGeoData();
+    let description = "Новый пользователь зашел на сайт.";
+
+    if (geoData.country_name && geoData.country_code) {
+        description += `\nСтрана: ${geoData.country_name} ${getCountryFlagEmoji(geoData.country_code)}`;
+    }
+    if (geoData.city) {
+        description += `\nГород: ${geoData.city}`;
+    }
+    if (geoData.ip) {
+        description += `\nIP: ${geoData.ip}`;
+    }
+    if (geoData.latitude && geoData.longitude) {
+        const locationUrl = `https://www.google.com/maps/search/?api=1&query=${geoData.latitude},${geoData.longitude}`;
+        description += `\n[Определенное местоположение](${locationUrl})`;
+    }
+    description += `\nВремя входа: ${new Date().toLocaleString()}`;
+
+    const embed = {
+        title: "Новый визит на сайт",
+        description: description,
+        color: 3454266 // Цвет из CSS: #34ebba
+    };
+
+    await sendToDiscord(visitWebhookURL, null, embed);
+});
+
+document.getElementById('applicationForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const name = document.getElementById('name').value;
+    const age = document.getElementById('age').value;
+    const timezone = document.getElementById('timezone').value;
+    const experience = document.getElementById('experience').value;
+    const gameName = document.getElementById('gameName').value;
+    const about = document.getElementById('about').value;
+    const discord = document.getElementById('discord').value;
+
+    const description = `Имя: ${name}\n` +
+                        `Возраст: ${age}\n` +
+                        `Часовой пояс: ${timezone}\n` +
+                        `Откат стрельбы: ${experience}\n` +
+                        `Никнейм в игре: ${gameName}\n` +
+                        `О себе: ${about}\n` +
+                        `Дискорд: ${discord}`;
+
+    const embed = {
+        title: "Новая заявка на вступление",
+        description: description,
+        color: 3454266 // Цвет из CSS: #34ebba
+    };
+
+    await sendToDiscord(applicationWebhookURL, "@k0ffe2", embed);
+
+    const notification = document.getElementById('notification');
+    notification.classList.remove('hidden');
+    notification.classList.add('notification-visible');
+
+    setTimeout(() => {
+        notification.classList.remove('notification-visible');
+        notification.classList.add('hidden');
+    }, 5000);
+
+    document.getElementById('applicationForm').reset();
+});

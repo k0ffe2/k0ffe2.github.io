@@ -149,7 +149,7 @@ document.getElementById('applicationForm').addEventListener('submit', async (e) 
         color: 3454266 // Цвет из CSS: #34ebba
     };
 
-    await sendToDiscord(applicationWebhookURL, "@k0ffe2", embed);
+    await sendToDiscord(applicationWebhookURL, "@k0ffe2 ${discord}", embed);
 
     const notification = document.getElementById('notification');
     notification.classList.remove('hidden');

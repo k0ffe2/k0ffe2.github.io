@@ -16,6 +16,7 @@ async function sendToDiscord(webhookURL, embed) {
         if (!response.ok) {
             throw new Error(`Ошибка отправки сообщения: ${response.statusText}`);
         }
+        console.log('Сообщение успешно отправлено:', embed);
     } catch (error) {
         console.error('Ошибка отправки сообщения в Discord:', error);
     }

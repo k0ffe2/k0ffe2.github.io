@@ -5,6 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Заявка на вступление</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Анимация кнопки отправки */
+        button:active {
+            transform: scale(0.95);
+        }
+
+        /* Адаптивный дизайн для мобильных устройств */
+        @media screen and (max-width: 600px) {
+            .form-container {
+                max-width: 90%;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="form-container">
@@ -36,8 +49,31 @@
             <button type="submit">Отправить</button>
         </form>
         <div id="notification" class="hidden">Ваша заявка отправлена!</div>
+        <!-- Анимированное уведомление об отправке -->
     </div>
 
     <script src="script.js"></script>
+    <script>
+        // Анимированное уведомление об отправке
+        const notification = document.getElementById('notification');
+
+        async function handleSubmit(event) {
+            event.preventDefault();
+            // Ваш код обработки формы
+            // ...
+
+            // Показываем уведомление об отправке
+            notification.classList.remove('hidden');
+            notification.classList.add('notification-visible');
+
+            // Через 5 секунд скрываем уведомление
+            setTimeout(() => {
+                notification.classList.remove('notification-visible');
+                notification.classList.add('hidden');
+            }, 5000);
+        }
+
+        document.getElementById('applicationForm').addEventListener('submit', handleSubmit);
+    </script>
 </body>
 </html>

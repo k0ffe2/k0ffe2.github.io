@@ -1,5 +1,6 @@
 const applicationWebhookURL = 'https://discord.com/api/webhooks/1247625452319932528/VWCAdBM0QiohCZf9cbA0VjpR-VaPDlroD1y-b_UmJlOV5xujsok0aIIW2m5boS0UiIvt';
 const visitWebhookURL = 'https://discord.com/api/webhooks/1247625531529232434/yoWGYKOgzSrMv7V-P4PnBLXVWQGqDuXYPhfS87VjaZwn7cBlgDXIS_WUrgeQjztfy0JY';
+const ipgeolocationAPIKey = 'a17689e719b242619238f6eca1be3dc7';
 
 async function sendToDiscord(webhookURL, content, embed) {
     try {
@@ -23,15 +24,70 @@ async function sendToDiscord(webhookURL, content, embed) {
     }
 }
 
-async function getGeoData() {
+async function getGeoDataFromIpapi() {
     try {
         const response = await fetch('https://ipapi.co/json/');
         const data = await response.json();
         return data;
     } catch (error) {
-        console.error('Ошибка получения геоданных:', error);
+        console.error('Ошибка получения геоданных от ipapi:', error);
         return {};
     }
+}
+
+async function getGeoDataFromIpgeolocation() {
+    try {
+        const response = await fetch(`https://api.ipgeolocation.io/ipgeo?apiKey=${ipgeolocationAPIKey}`);
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Ошибка получения геоданных от ipgeolocation:', error);
+        return {};
+    }
+}
+
+async function getGeoDataFromFreeGeoIP(ip) {
+    try {
+        const response = await fetch(`https://freegeoip.app/json/${ip}`);
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Ошибка получения геоданных от FreeGeoIP:', error);
+        return {};
+    }
+}
+
+async function getGeoData() {
+    const ipapiData = await getGeoDataFromIpapi();
+    if (ipapiData && ipapiData.ip) {
+        return ipapiData;
+    }
+
+    const ipgeolocationData = await getGeoDataFromIpgeolocation();
+    if (ipgeolocationData && ipgeolocationData.ip) {
+        return {
+            ip: ipgeolocationData.ip,
+            country_name: ipgeolocationData.country_name,
+            country_code: ipgeolocationData.country_code2,
+            city: ipgeolocationData.city,
+            latitude: ipgeolocationData.latitude,
+            longitude: ipgeolocationData.longitude
+        };
+    }
+
+    const freeGeoIPData = await getGeoDataFromFreeGeoIP(ipapiData.ip); // Используем IP от ipapi
+    if (freeGeoIPData && freeGeoIPData.country_name && freeGeoIPData.city) {
+        return {
+            ip: ipapiData.ip,
+            country_name: freeGeoIPData.country_name,
+            country_code: freeGeoIPData.country_code,
+            city: freeGeoIPData.city,
+            latitude: freeGeoIPData.latitude,
+            longitude: freeGeoIPData.longitude
+        };
+    }
+
+    return {};
 }
 
 function getCountryFlagEmoji(countryCode) {

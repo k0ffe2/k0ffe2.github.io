@@ -78,7 +78,18 @@ button:hover {
     display: none;
 }
 
-.notification-visible {
-    display: block;
-    opacity: 1;
+.discord-button {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    background-color: #7289da;
+    color: white;
+    text-decoration: none;
+    transition: transform 0.3s;
+}
+
+.discord-button:hover {
+    transform: translateY(-5px);
 }

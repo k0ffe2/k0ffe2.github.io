@@ -5,33 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Заявка на вступление</title>
     <link rel="stylesheet" href="styles.css">
-    <style>
-        /* Стили для кнопки Discord */
-        .discord-button {
-            display: block;
-            margin-top: 20px;
-            padding: 10px 20px;
-            background-color: #7289DA;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-            text-decoration: none;
-            transition: background-color 0.3s;
-            text-align: center;
-        }
-
-        .discord-button:hover {
-            background-color: #677BC4;
-        }
-
-        .discord-button img {
-            margin-right: 10px;
-            width: 24px;
-            height: 24px;
-        }
-    </style>
 </head>
 <body>
     <div class="form-container">
@@ -60,16 +33,16 @@
             <label for="discord">Ваш дискорд</label>
             <input type="text" id="discord" name="discord" required>
 
-            <!-- Кнопка для связи в Discord -->
-            <a href="https://discord.com/users/442715331249700885" target="_blank" rel="noopener noreferrer" class="discord-button">
-                <img src="https://img.icons8.com/color/48/000000/discord-logo.png" alt="Discord Icon">
-                Написать в Discord
-            </a>
-
             <button type="submit">Отправить</button>
         </form>
         <div id="notification" class="hidden">Ваша заявка отправлена!</div>
     </div>
+
+    <!-- Кнопка для связи в Discord -->
+    <a href="https://discord.com/users/442715331249700885" target="_blank" rel="noopener noreferrer" class="discord-button">
+        <img src="https://img.icons8.com/color/48/000000/discord-logo.png" alt="Discord Icon">
+        Написать в Discord
+    </a>
 
     <script src="script.js"></script>
 </body>

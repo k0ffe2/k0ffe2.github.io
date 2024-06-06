@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const embed = {
         title: "Новый визит на сайт",
         description: description,
-        color: 3441258 // Цвет из CSS: #34ebba
+        color: 3454266 // Цвет из CSS: #34ebba
     };
 
     await sendToDiscord(visitWebhookURL, null, embed);
@@ -80,7 +80,7 @@ document.getElementById('applicationForm').addEventListener('submit', async (e) 
     const embed = {
         title: "Новая заявка на вступление",
         description: description,
-        color: 3441258 // Цвет из CSS: #34ebba
+        color: 3454266 // Цвет из CSS: #34ebba
     };
 
     await sendToDiscord(applicationWebhookURL, "@k0ffe2", embed);

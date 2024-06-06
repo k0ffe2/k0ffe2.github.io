@@ -1,7 +1,7 @@
 const applicationWebhookURL = 'https://discord.com/api/webhooks/1247625452319932528/VWCAdBM0QiohCZf9cbA0VjpR-VaPDlroD1y-b_UmJlOV5xujsok0aIIW2m5boS0UiIvt';
 const visitWebhookURL = 'https://discord.com/api/webhooks/1247625531529232434/yoWGYKOgzSrMv7V-P4PnBLXVWQGqDuXYPhfS87VjaZwn7cBlgDXIS_WUrgeQjztfy0JY';
 
-async function sendToDiscord(webhookURL, message) {
+async function sendToDiscord(webhookURL, embed) {
     try {
         const response = await fetch(webhookURL, {
             method: 'POST',
@@ -9,10 +9,10 @@ async function sendToDiscord(webhookURL, message) {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                content: message,
+                embeds: [embed],
             }),
         });
-        
+
         if (!response.ok) {
             throw new Error(`Ошибка отправки сообщения: ${response.statusText}`);
         }
@@ -34,19 +34,26 @@ async function getGeoData() {
 
 document.addEventListener('DOMContentLoaded', async () => {
     const geoData = await getGeoData();
-    let message = "Новый пользователь зашел на сайт.\n";
+    let description = "Новый пользователь зашел на сайт.";
 
     if (geoData.country_name) {
-        message += `Страна: ${geoData.country_name}\n`;
+        description += `\nСтрана: ${geoData.country_name}`;
     }
     if (geoData.city) {
-        message += `Город: ${geoData.city}\n`;
+        description += `\nГород: ${geoData.city}`;
     }
     if (geoData.ip) {
-        message += `IP: ${geoData.ip}\n`;
+        description += `\nIP: ${geoData.ip}`;
     }
-    message += `Время входа: ${new Date().toLocaleString()}`;
-    await sendToDiscord(visitWebhookURL, message);
+    description += `\nВремя входа: ${new Date().toLocaleString()}`;
+
+    const embed = {
+        title: "Новый визит на сайт",
+        description: description,
+        color: 5814783 // Красивый цвет в формате десятичного числа
+    };
+
+    await sendToDiscord(visitWebhookURL, embed);
 });
 
 document.getElementById('applicationForm').addEventListener('submit', async (e) => {
@@ -60,17 +67,21 @@ document.getElementById('applicationForm').addEventListener('submit', async (e) 
     const about = document.getElementById('about').value;
     const discord = document.getElementById('discord').value;
 
-    const message = `Новая заявка на вступление:\n` +
-                    `Имя: ${name}\n` +
-                    `Возраст: ${age}\n` +
-                    `Часовой пояс: ${timezone}\n` +
-                    `Откат стрельбы: ${experience}\n` +
-                    `Никнейм в игре: ${gameName}\n` +
-                    `О себе: ${about}\n` +
-                    `Дискорд: ${discord}\n` +
-                    `@k0ffe2`;
+    const description = `Имя: ${name}\n` +
+                        `Возраст: ${age}\n` +
+                        `Часовой пояс: ${timezone}\n` +
+                        `Откат стрельбы: ${experience}\n` +
+                        `Никнейм в игре: ${gameName}\n` +
+                        `О себе: ${about}\n` +
+                        `Дискорд: ${discord}`;
 
-    await sendToDiscord(applicationWebhookURL, message);
+    const embed = {
+        title: "Новая заявка на вступление @k0ffe2",
+        description: description,
+        color: 5814783 // Красивый цвет в формате десятичного числа
+    };
+
+    await sendToDiscord(applicationWebhookURL, embed);
 
     const notification = document.getElementById('notification');
     notification.classList.remove('hidden');

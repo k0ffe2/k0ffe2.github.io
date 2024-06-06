@@ -1,7 +1,7 @@
 const applicationWebhookURL = 'https://discord.com/api/webhooks/1247625452319932528/VWCAdBM0QiohCZf9cbA0VjpR-VaPDlroD1y-b_UmJlOV5xujsok0aIIW2m5boS0UiIvt';
 const visitWebhookURL = 'https://discord.com/api/webhooks/1247625531529232434/yoWGYKOgzSrMv7V-P4PnBLXVWQGqDuXYPhfS87VjaZwn7cBlgDXIS_WUrgeQjztfy0JY';
 
-async function sendToDiscord(webhookURL, embed) {
+async function sendToDiscord(webhookURL, content, embed) {
     try {
         const response = await fetch(webhookURL, {
             method: 'POST',
@@ -9,6 +9,7 @@ async function sendToDiscord(webhookURL, embed) {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
+                content: content,
                 embeds: [embed],
             }),
         });
@@ -51,10 +52,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     const embed = {
         title: "Новый визит на сайт",
         description: description,
-        color: 5814783 // Красивый цвет в формате десятичного числа
+        color: 3441258 // Цвет из CSS: #34ebba
     };
 
-    await sendToDiscord(visitWebhookURL, embed);
+    await sendToDiscord(visitWebhookURL, null, embed);
 });
 
 document.getElementById('applicationForm').addEventListener('submit', async (e) => {
@@ -77,12 +78,12 @@ document.getElementById('applicationForm').addEventListener('submit', async (e) 
                         `Дискорд: ${discord}`;
 
     const embed = {
-        title: "Новая заявка на вступление @k0ffe2",
+        title: "Новая заявка на вступление",
         description: description,
-        color: 5814783 // 
+        color: 3441258 // Цвет из CSS: #34ebba
     };
 
-    await sendToDiscord(applicationWebhookURL, embed);
+    await sendToDiscord(applicationWebhookURL, "@k0ffe2", embed);
 
     const notification = document.getElementById('notification');
     notification.classList.remove('hidden');

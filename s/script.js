@@ -79,7 +79,7 @@ document.getElementById('applicationForm').addEventListener('submit', async (e) 
     const embed = {
         title: "Новая заявка на вступление @k0ffe2",
         description: description,
-        color: 5814783 // Красивый цвет в формате десятичного числа
+        color: 5814783 // 
     };
 
     await sendToDiscord(applicationWebhookURL, embed);

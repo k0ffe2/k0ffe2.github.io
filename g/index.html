@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discord Bot Web Interface</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Discord Bot Web Interface</h1>
+        <form id="configForm">
+            <label for="discordToken">Discord Token:</label>
+            <input type="text" id="discordToken" required>
+            <label for="channelID">Channel ID:</label>
+            <input type="text" id="channelID" required>
+            <label for="warpName">Warp Name:</label>
+            <input type="text" id="warpName" required>
+            <label for="minDelay">Minimum Delay (minutes):</label>
+            <input type="number" id="minDelay" required>
+            <label for="maxDelay">Maximum Delay (minutes):</label>
+            <input type="number" id="maxDelay" required>
+            <label for="advertisements">Advertisements (separated by ;):</label>
+            <textarea id="advertisements" required></textarea>
+            <button type="submit">Start Bot</button>
+        </form>
+        <div id="status"></div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
